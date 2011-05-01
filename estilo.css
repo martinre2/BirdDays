@@ -1,0 +1,63 @@
+body {
+    font-family:Georgia, "Times New Roman", Times, serif;
+    font-size: large;
+}
+.logo {
+    width: 380px;
+    height: 120px;
+    background-image: url(img/logo.png);
+}
+
+.centrado {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.contendor {
+    width: 500px;
+    padding: 20px;
+    border: medium dashed #36C;
+}
+
+.imgfondo {
+    background-position:center;
+    background-repeat:no-repeat;
+    padding: 10px;
+}
+
+.fslogo {
+    width: 200px;
+    height: 40px;
+    background-image: url(img/fs.png);
+    margin-left: 30px;
+}
+
+.fblogo {
+    width: 50px;
+    height: 40px;
+    background-image: url(img/fb.png);
+    float: left;
+}
+
+.contenedorlogos {
+    width: 230px;
+}
+
+.elementofrm {
+    border: 1px solid;
+    font-family:Georgia, "Times New Roman", Times, serif;
+    font-size: large;
+}
+
+button {
+    min-height: 40px;
+    width: 150px;
+    background-color: #36C;
+    color:#FFF;
+}
+
+input {
+    padding: 7px;
+    border-color: #999;
+    width: 200px;
+}
