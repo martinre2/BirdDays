@@ -2,7 +2,6 @@
 
 session_start();
 include('configuraciones.php');
-$urlApp = 'http://localhost/birddays/';
 
 /*
 if (isset($_POST['nombreCal']))
@@ -14,7 +13,7 @@ if (isset($_SESSION['token_acceso_facebook'])) {
         session_unset();
         header('location: ' . URL_MANEJADOR_FB);
     }
-    header('location: ' . $urlApp . 'manejadorInfo.php');
+    header('location: ' . URL_BASE . 'manejadorInfo.php');
 } elseif (isset($_GET['code'])) {
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_URL, 'https://graph.facebook.com/oauth/access_token?client_id=' . FACEBOOK_CLIENT_ID . '&redirect_uri=' . URL_MANEJADOR_FB . '&client_secret=' . FACEBOOK_CLIENT_SECRET . '&code=' . $_GET['code']);
