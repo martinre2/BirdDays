@@ -3,11 +3,6 @@
 session_start();
 include('configuraciones.php');
 
-/*
-if (isset($_POST['nombreCal']))
-    $_SESSION['nombreCal'] = $_POST['nombreCal'];
-*/
-
 if (isset($_SESSION['token_acceso_facebook'])) {
     if (time() >= $_SESSION['expira_token_facebook']) {
         session_unset();
