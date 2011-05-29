@@ -6,39 +6,48 @@ contenidoInicio = '\
 <p></p>\
 <button class="elementofrm" value="submit" id="btnComenzar">Comenzar</button>\
 </form>\
-</center>\
-<p></p>\
-<div class="contenedorlogos centrado">\
-    <div class="imgfondo fblogo"></div>\
-    <div class="imgfondo fslogo"></div>\
-</div>';
+</center>';
 
 $(document).ready(function() {
     if(aut == true) {
-        $.getJSON('manejadorJson.php?cumplesMes', function(data) {
-            contenido = '<h3>Este mes cumplen: </h3>';
-            $(contenido).appendTo("#contenido");
-            $.each(data, function(i, amigo){
-                contenido = '<p>' + amigo.nombre + ' el ' + amigo.dia + '<br/>';
-                contenido += '<img src="' + amigo.foto + '" alt="' + amigo.nombre + '"/>';
-                $(contenido).appendTo("#contenido");
+        amigos = $.parseJSON($.ajax({
+            url: "manejadorJson.php?cumplesMes",
+            async: false
+        }).responseText);
+        lugares = $.parseJSON($.ajax({
+            url: "manejadorJson.php?lugares",
+            async: false
+        }).responseText);
+        contenido = '<table width="500"><tr><td><h4>Cumplen años este mes</h4></td><td><h4>Pueden celebrarlo en</h4></td></tr>';
+        contInicioLugares = 0;
+        $.each(amigos, function(i, amigo){
+            contenido += '<tr><td><img src="' + amigo.foto + '" alt="' + amigo.nombre + '"/>';
+            contenido += '<p>' + amigo.nombre + '</p><p>' + amigo.fecha + '</p></td><td>';
+            contLugares = 1;
+            $.each(lugares, function(i, lugar){
+                if(i >= contInicioLugares) {
+                    if(contLugares <= 3) {
+                        contenido += '<p><a href="https://foursquare.com/venue/' + lugar.id +'" target="_blank">' + lugar.nombre + '</a></p>';
+                        contLugares++;
+                    }
+                }
             });
-            contenido = '<p align="center">¿Cómo quieres que se llame tu calendario? </p>\
+            contInicioLugares = contInicioLugares+3;
+            contenido += '</td></tr>';
+        });
+        contenido += '</table>';
+        $(contenido).appendTo("#contenido");
+        contenido = '<p align="center">¿Cómo quieres que se llame tu calendario de Google? </p>\
             <p>\
             <center>\
             <form>\
             <input type="text" class="elementofrm" value="Calendario BirdDays" name="nombreCal"/>\
             <p></p>\
-            <button class="elementofrm" value="submit" id="btnCal">Exportar a un calendario</button>\
+            <button class="elementofrm" value="submit" id="btnCal">Exportar a Google Calendars</button>\
             </form>\
             </center>\
             </p>';
-            $(contenido).appendTo("#contenido");
-            if(ubicacion) {
-                contenido = '<h3>Parece que tu estás en: ' + ubicacion + '</h3>';
-                $(contenido).appendTo("#contenido");
-            }
-        });
+        $(contenido).appendTo("#contenido");
     }
     else
         $('#contenido').html(contenidoInicio);
