@@ -1,10 +1,6 @@
 <?php
 
 session_start();
-define('NUM_RECOMENDACIONES', 3);
-define('RADIO_BUSQUEDA', 15000);
-define('LAT_DEFECTO', 19.42705);
-define('LON_DEFECTO', -99.127571);
 include('funcionesLlamadasApis.php');
 
 $usuario = llamaApiFacebook('https://graph.facebook.com/me');
@@ -45,7 +41,7 @@ $_SESSION['cumplesMes'] = $cumplesMes;
 $_SESSION['lugares'] = $recomendaciones;
 header('location: ' . URL_BASE);
 
-function generaLugares($numResultados, $ubicacionUsuario) {
+function generaLugares($numPersonas, $ubicacionUsuario) {
     if(isset($ubicacionUsuario)) {
         $lat = $ubicacionUsuario['latitud'];
         $lon = $ubicacionUsuario['longitud'];
@@ -57,7 +53,7 @@ function generaLugares($numResultados, $ubicacionUsuario) {
     $tiposLugar = array('food', 'drinks', 'coffee');
     $resultados = array ();
     foreach ($tiposLugar as $tipoLugar) {
-        $lugares = llamaApiFoursquare('https://api.foursquare.com/v2/venues/explore?limit=' . $numResultados . '&radius=' . RADIO_BUSQUEDA . '&section=' . $tipoLugar . '&ll=' . $lat . ',' . $lon, true);
+        $lugares = llamaApiFoursquare('https://api.foursquare.com/v2/venues/explore?limit=' . ($numPersonas * NUM_RECOMENDACIONES_TIPOLUGAR) . '&radius=' . RADIO_BUSQUEDA . '&section=' . $tipoLugar . '&ll=' . $lat . ',' . $lon, true);
         $lugares = $lugares['response']['groups'][0]['items'];
         foreach ($lugares as $lugar) {
             $lugar = $lugar['venue'];

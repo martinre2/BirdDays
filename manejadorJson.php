@@ -18,6 +18,8 @@ if (isset($_GET['eventos'])) {
     echo json_encode($_SESSION['eventos']);
 }
 if (isset($_GET['lugares'])) {
+    // Generar lugares distintos cada peticion
+    shuffle($_SESSION['lugares']);
     echo json_encode($_SESSION['lugares']);
 }
 ?>

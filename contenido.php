@@ -1,10 +1,12 @@
 <?php
 session_start();
 header('content-type: application/x-javascript; charset=UTF-8');
-if (isset($_SESSION['cumplesMes']))
-    echo 'aut = true;';
+if (isset($_SESSION['cumplesMes'])) {
+    echo "aut = true;\n";
+    echo 'numResultados = ' . (count($_SESSION['lugares']) / count($_SESSION['cumplesMes'])) . ";\n";
+}
 else
-    echo 'aut = false;';
+    echo "aut = false;\n";
 ?>
 contenidoInicio = '\
 <p>¿Eres de los que siempre olvidan los cumpleaños y festejan en el mismo lugar?</p>\
@@ -34,13 +36,13 @@ $(document).ready(function() {
             contLugares = 1;
             $.each(lugares, function(i, lugar){
                 if(i >= contInicioLugares) {
-                    if(contLugares <= 3) {
+                    if(contLugares <= numResultados) {
                         contenido += '<p><a href="' + lugar.perfil +'" target="_blank">' + lugar.nombre + '</a></p>';
                         contLugares++;
                     }
                 }
             });
-            contInicioLugares = contInicioLugares+3;
+            contInicioLugares += numResultados;
             contenido += '</td></tr>';
         });
         contenido += '</table>';
