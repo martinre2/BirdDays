@@ -3,12 +3,13 @@
 require('conf.php');
 define("scope","https://www.google.com/calendar/feeds/");
 define("next","http://birddays.reddementes.com/oauth2callback");
+define("BASE","http://reddementes.com/birddays/");
+
 
 session_start();
 
 function getCode(){
-	echo "Adrento";
-	echo "<a href='https://accounts.google.com/o/oauth2/auth?client_id=".CLIENT_ID. "&redirect_uri=" .next. "&scope=" .scope. "&response_type=code'>LogIn</a>";
+	header('location: ' ."https://accounts.google.com/o/oauth2/auth?client_id=".CLIENT_ID. "&redirect_uri=" .next. "&scope=" .scope. "&response_type=code");
 }
 
 function getToken($code){
@@ -57,7 +58,7 @@ if (isset($_GET['code'])&& !isset($_SESSION['sessionToken'])){
 
 
 if (isset($_SESSION['sessionToken'])) {
-	    echo ("<span>Your tokenID is".$_SESSION['sessionToken']."</span>");
+	header('location: '.BASE);
 }
 else{
 	getCode();

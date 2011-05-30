@@ -2,6 +2,7 @@
 define("SCOPE","https://www.google.com/calendar/feeds/default/owncalendars/full?alt=jsonc");
 define("GDATA","GData-Version: 2");
 define("HEADER","Content-type: application/json");
+define("AUTH","http://birddays.reddementes.com/oauth2callback");
 
 session_start();
 header('Content-type: application/json; charset=UTF-8');
@@ -23,10 +24,10 @@ function trackGsessionid(){
 }       
 
 
-if (isset($_GET['title'])){
+function make($title){
 	$json = array(
 		"data" => array(
-			"title" => $_GET['title'],
+			"title" => $title,
 			"details" => "This Calendar contains the birthdays of your facebook friends",
 			"timeZone" => "America/Mexico_City",
 			"hidden" => false,
@@ -58,10 +59,12 @@ if (isset($_GET['title'])){
 		$json= json_decode($response,true);
 
 		$_SESSION['calendarFeed'] = $json['data']['eventFeedLink'];
+		
+		return true; 
 
-	}
+	}else
+		header('location: '.AUTH);
 
-}else
-	echo "You need give a title parameter";
+}
 
 ?>
