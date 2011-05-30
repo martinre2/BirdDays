@@ -30,7 +30,7 @@ if (isset($_GET['title'])){
 			"details" => "This Calendar contains the birthdays of your facebook friends",
 			"timeZone" => "America/Mexico_City",
 			"hidden" => false,
-			"color" => "#2952A3",
+			"color" => "#6B3304",
 			"location" => "Mexico"
 
 			)
@@ -54,7 +54,11 @@ if (isset($_GET['title'])){
 			echo 'Error cURL en la peticion POST: ' . curl_error($handler);
 		}
 
-		echo $response;
+		//echo $response;
+		$json= json_decode($response,true);
+
+		$_SESSION['calendarFeed'] = $json['data']['eventFeedLink'];
+
 	}
 
 }else

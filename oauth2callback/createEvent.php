@@ -1,5 +1,5 @@
 <?php
-define("SCOPE","https://www.google.com/calendar/feeds/default/private/full?alt=jsonc");
+define("SCOPE","https://www.google.com/calendar/feeds/default/owncalendars/full?alt=jsonc");
 define("GDATA","GData-Version: 2");
 define("HEADER","Content-type: application/json");
 
@@ -8,7 +8,7 @@ header('Content-type: application/json; charset=UTF-8');
 
 function trackGsessionid(){
 	$handler = curl_init();
-	curl_setopt($handler, CURLOPT_URL, SCOPE."&oauth_token=".$_SESSION['sessionToken']);
+	curl_setopt($handler, CURLOPT_URL, $_SESSION['calendarFeed']."?alt=jsonc&oauth_token=".$_SESSION['sessionToken']);
 	curl_setopt($handler, CURLOPT_FOLLOWLOCATION, 1);
 	curl_setopt($handler, CURLOPT_RETURNTRANSFER, true);
 	$response = curl_exec($handler);
@@ -23,7 +23,8 @@ function trackGsessionid(){
 
 }
 
-if (isset($_GET['title'])){
+if (isset($_SESSION['calendarFeed'])){
+	echo $_SESSION['calendarFeed'];
 	$json = array(
 		"data" => array(
 			"title" => "Evento de prueba",
@@ -57,6 +58,7 @@ if (isset($_GET['title'])){
 		}
 
 		echo $response;
+		//var_dump(json_decode($response));
 	}
 
 }else
