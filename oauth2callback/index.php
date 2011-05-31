@@ -1,16 +1,29 @@
 <?php
+session_start();
 
 require('conf.php');
 define("scope","https://www.google.com/calendar/feeds/");
-define("next","http://birddays.reddementes.com/oauth2callback");
+define("next","http://reddementes.com/birddays/oauth2callback/");
 define("BASE","http://reddementes.com/birddays/");
 
 
-session_start();
 
 function getCode(){
-	header('location: ' ."https://accounts.google.com/o/oauth2/auth?client_id=".CLIENT_ID. "&redirect_uri=" .next. "&scope=" .scope. "&response_type=code");
+
+	$nwurl= "https://accounts.google.com/o/oauth2/auth?client_id=".CLIENT_ID. "&redirect_uri=" .next. "&scope=" .scope. "&response_type=code";
+
+	echo '<script type=\'text/javascript\'>top.location.href = \'' . $nwurl .  '\';</script>';
+	return;
+
 }
+
+function goBase(){
+
+	echo '<script type=\'text/javascript\'>top.location.href = \'' . BASE .  '\';</script>';
+	return;
+
+}
+
 
 function getToken($code){
 	$handler = curl_init();
@@ -30,38 +43,37 @@ function getToken($code){
 	}
 	curl_close($handler);
 	$decode = json_decode($response, true);
-      	$_SESSION['sessionToken'] = $decode['access_token'];
+
+	$_SESSION['sessionToken'] = $decode['access_token'];
+
+	goBase();
+
+	return;
 
 }
-
-if(! isset($_SESSION['sessionToken']) && isset($_GET['token'])) {
-	/*AuthSubSessionToken*/
-	$handler = curl_init();
-	curl_setopt($handler, CURLOPT_URL, "https://www.google.com/accounts/AuthSubSessionToken");
-	curl_setopt($handler, CURLOPT_HTTPHEADER, array("Authorization: AuthSub token=\"".$_SESSION['sessionToken']."\""));     
-	$response = curl_exec ($handler);  
-	curl_close($handler);  
-	echo $response;  
-
-	$_SESSION['sessionToken'] = $_GET['token'];
-
-	    echo "---->".$_SESSION['sessionToken'];
-}
-
-if (isset($_GET['error'])){
-	echo "<H1>ERROR:". $_GET['error']."</H1> ";
-}
-
-if (isset($_GET['code'])&& !isset($_SESSION['sessionToken'])){
-	getToken($_GET['code']);
-}
-
-
 if (isset($_SESSION['sessionToken'])) {
-	header('location: '.BASE);
+	        header('location: '.BASE."?ssid=".session_id());
 }
+
+elseif (isset($_GET['code'])){
+
+	$nwurl= next.'/?selfcode='. $_GET['code'];
+
+	echo '<script type=\'text/javascript\'>top.location.href = \'' . $nwurl .  '\';</script>';
+	return;
+	
+}
+
+elseif (isset($_GET['error'])){
+	echo "<H1>ERROR:". $_GET['error']."</H1> ";
+	return;
+}
+
+elseif(isset($_GET['selfcode'])){
+	getToken($_GET['selfcode']);
+}
+
 else{
 	getCode();
-	    
 }
 ?>
