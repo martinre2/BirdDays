@@ -4,10 +4,9 @@ define("GDATA","GData-Version: 2");
 define("HEADER","Content-type: application/json");
 define("AUTH","http://birddays.reddementes.com/oauth2callback");
 
-session_start();
 header('Content-type: application/json; charset=UTF-8');
 
-function trackGsessionid(){
+function trackGsessionidCal(){
 	$handler = curl_init();
 	curl_setopt($handler, CURLOPT_URL, SCOPE."&oauth_token=".$_SESSION['sessionToken']);
 	curl_setopt($handler, CURLOPT_FOLLOWLOCATION, 1);
@@ -37,12 +36,13 @@ function make($title){
 			)
 		);
 	//$json = json_encode($json);
+	
 
 
 	if (isset($_SESSION['sessionToken'])) {
 
 		$handler = curl_init();
-		curl_setopt($handler, CURLOPT_URL, trackGsessionid());
+		curl_setopt($handler, CURLOPT_URL, trackGsessionidCal());
 		curl_setopt($handler, CURLOPT_HTTPHEADER, array(HEADER));
 		curl_setopt($handler, CURLOPT_FOLLOWLOCATION, 1);
 		curl_setopt($handler, CURLOPT_RETURNTRANSFER, true);
@@ -55,7 +55,7 @@ function make($title){
 			echo 'Error cURL en la peticion POST: ' . curl_error($handler);
 		}
 
-		//echo $response;
+		echo $response;
 		$json= json_decode($response,true);
 
 		$_SESSION['calendarFeed'] = $json['data']['eventFeedLink'];

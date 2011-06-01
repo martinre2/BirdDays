@@ -3,8 +3,8 @@ session_start();
 
 require('conf.php');
 define("scope","https://www.google.com/calendar/feeds/");
-define("next","http://reddementes.com/birddays/oauth2callback/");
-define("BASE","http://reddementes.com/birddays/");
+define("next","http://birddays.reddementes.com/oauth2callback/");
+define("BASE","http://birddays.reddementes.com/");
 
 
 
