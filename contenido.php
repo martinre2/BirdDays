@@ -1,9 +1,14 @@
 <?php
 session_start();
-header('content-type: application/x-javascript; charset=UTF-8');
+
+echo '//'.session_id().";\n";
 if (isset($_SESSION['cumplesMes'])) {
     echo "aut = true;\n";
     echo 'numResultados = ' . (count($_SESSION['lugares']) / count($_SESSION['cumplesMes'])) . ";\n";
+    if (isset($_SESSION['sessionToken']))
+    	echo "OAuth = true;\n";
+    else
+    	echo "OAuth = false;\n";
 }
 else
     echo "aut = false;\n";
@@ -47,17 +52,26 @@ $(document).ready(function() {
         });
         contenido += '</table>';
         $(contenido).appendTo("#contenido");
-        contenido = '<p align="center">¿Cómo quieres que se llame tu calendario de Google? </p>\
-            <p>\
-            <center>\
-            <form>\
-            <input type="text" class="elementofrm" value="Calendario BirdDays" name="nombreCal"/>\
+        contenido ='<center>\
+            <form action="./oauth2callback/" method="GET">\
             <p></p>\
             <button class="elementofrm" value="submit" id="btnCal">Exportar a Google Calendars</button>\
             </form>\
             </center>\
             </p>';
-        $(contenido).appendTo("#contenido");
+	contenidoAuth = '<p align="center">¿Cómo quieres que se llame tu calendario de Google? </p>\
+	            <p>\
+		    <center>\
+		    <form action="makeCal.php" method="GET">\
+		    <input type="text" class="elementofrm" value="Calendario BirdDays" name="nombreCal"/>\
+		    <p></p>\
+		    <button class="elementofrm" value="submit" id="btnCal">Exportar a Google Calendars</button>\
+		    </form>\
+		    </center>\
+		    </p>';
+	
+	val = (OAuth)?contenidoAuth:contenido;
+	$(val).appendTo("#contenido");
     }
     else
         $('#contenido').html(contenidoInicio);
