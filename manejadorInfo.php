@@ -15,15 +15,16 @@ if (isset($usuario['location'])) {
 $consulta = "SELECT uid,name,birthday_date FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = $idUsuario) ORDER BY birthday_date";
 $consulta = urlencode($consulta);
 $resultados = llamaApiFacebook('https://api.facebook.com/method/fql.query?query=' . $consulta . '&format=JSON', true);
-$eventos = array('nombre_calendario'=> $_SESSION['nombreCal'], 'eventos'=> array());
+$eventos = array('nombre_calendario'=> '', 'eventos'=> array());
 $cumplesMes = array();
 foreach ($resultados as $resultado) {
     if (isset($resultado['birthday_date'])) {
-        $dia = substr($resultado['birthday_date'], 0, 2);
-        $mes = substr($resultado['birthday_date'], 3, 2);
+        $mes = substr($resultado['birthday_date'], 0, 2);
+        $dia = substr($resultado['birthday_date'], 3, 2);
         $eventos['eventos'][] = array (
                             'nombre' => 'Cumpleaños de ' . $resultado['name'],
-                            'inicio' => date('Y') . $mes . $dia . 'T000000',
+			    //'inicio' => date('Y') . $mes . $dia . 'T000000',
+			    'inicio' => date('Y') . $mes . $dia,
                             'fin' => date('Y') . $mes . $dia . 'T235959'
                             );
         if($mes == date('m'))
